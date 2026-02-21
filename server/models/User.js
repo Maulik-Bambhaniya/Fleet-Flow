@@ -8,17 +8,27 @@ const pool = require("../config/db");
 const User = {
     // Ensure the table exists
     async createTable() {
+        // Create the table if it doesn't exist yet
         await pool.query(`
-      CREATE TABLE IF NOT EXISTS users (
-        id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-        name VARCHAR(255) NOT NULL,
-        email VARCHAR(255) UNIQUE NOT NULL,
-        password VARCHAR(255) NOT NULL,
-        role VARCHAR(50) NOT NULL DEFAULT 'dispatcher',
-        created_at TIMESTAMPTZ DEFAULT NOW(),
-        updated_at TIMESTAMPTZ DEFAULT NOW()
-      )
-    `);
+            CREATE TABLE IF NOT EXISTS users (
+                id         UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+                name       VARCHAR(255) NOT NULL,
+                email      VARCHAR(255) UNIQUE NOT NULL,
+                password   VARCHAR(255) NOT NULL,
+                role       VARCHAR(50) NOT NULL DEFAULT 'dispatcher',
+                created_at TIMESTAMPTZ DEFAULT NOW(),
+                updated_at TIMESTAMPTZ DEFAULT NOW()
+            )
+        `);
+
+        // Migration: add columns that may be missing from tables created before
+        // these fields were defined (ALTER TABLE ... ADD COLUMN IF NOT EXISTS is idempotent)
+        await pool.query(`
+            ALTER TABLE users
+                ADD COLUMN IF NOT EXISTS role       VARCHAR(50)  NOT NULL DEFAULT 'dispatcher',
+                ADD COLUMN IF NOT EXISTS created_at TIMESTAMPTZ DEFAULT NOW(),
+                ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ DEFAULT NOW()
+        `);
     },
 
     // Fetch all users
