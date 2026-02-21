@@ -1,6 +1,7 @@
 /*
   Vehicle model — wraps PostgreSQL queries for the "vehicles" table.
-  Tracks fleet assets with status management for maintenance integration.
+  Tracks fleet assets with status management for maintenance and dispatch.
+  Statuses: 'Available' | 'On Trip' | 'In Shop' | 'Out of Service'
 */
 
 const pool = require("../config/db");
@@ -13,8 +14,9 @@ const Vehicle = {
         id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
         name VARCHAR(255) NOT NULL,
         license_plate VARCHAR(100) UNIQUE NOT NULL,
-        type VARCHAR(50) NOT NULL DEFAULT 'Truck',
+        type VARCHAR(100) NOT NULL DEFAULT 'Truck',
         max_capacity NUMERIC DEFAULT 0,
+        region VARCHAR(100),
         odometer NUMERIC DEFAULT 0,
         status VARCHAR(50) NOT NULL DEFAULT 'Available',
         created_at TIMESTAMPTZ DEFAULT NOW(),
@@ -26,7 +28,7 @@ const Vehicle = {
     // Fetch all vehicles
     async findAll() {
         const { rows } = await pool.query(
-            "SELECT * FROM vehicles ORDER BY created_at DESC"
+            "SELECT * FROM vehicles ORDER BY name ASC"
         );
         return rows;
     },
@@ -36,6 +38,14 @@ const Vehicle = {
         const { rows } = await pool.query(
             "SELECT * FROM vehicles WHERE status = $1 ORDER BY name",
             [status]
+        );
+        return rows;
+    },
+
+    // Fetch only available vehicles (for dispatch dropdown)
+    async findAvailable() {
+        const { rows } = await pool.query(
+            "SELECT * FROM vehicles WHERE status = 'Available' ORDER BY name ASC"
         );
         return rows;
     },
@@ -50,12 +60,12 @@ const Vehicle = {
     },
 
     // Create a new vehicle
-    async create({ name, license_plate, type = "Truck", max_capacity = 0, odometer = 0, status = "Available" }) {
+    async create({ name, license_plate, type = "Truck", max_capacity = 0, odometer = 0, region = null, status = "Available" }) {
         const { rows } = await pool.query(
-            `INSERT INTO vehicles (name, license_plate, type, max_capacity, odometer, status)
-             VALUES ($1, $2, $3, $4, $5, $6)
+            `INSERT INTO vehicles (name, license_plate, type, max_capacity, odometer, region, status)
+             VALUES ($1, $2, $3, $4, $5, $6, $7)
              RETURNING *`,
-            [name, license_plate, type, max_capacity, odometer, status]
+            [name, license_plate, type, max_capacity, odometer, region, status]
         );
         return rows[0];
     },
@@ -96,14 +106,14 @@ const Vehicle = {
         if (parseInt(rows[0].count) > 0) return;
 
         const defaults = [
-            { name: "Volvo FH16 - #402", license_plate: "V78-992-KL", type: "Truck", max_capacity: 18000, odometer: 125000 },
-            { name: "Mercedes Actros - #205", license_plate: "M45-123-ZZ", type: "Truck", max_capacity: 15000, odometer: 98000 },
-            { name: "Scania R500 - #112", license_plate: "S88-554-PL", type: "Truck", max_capacity: 20000, odometer: 210000 },
-            { name: "Ford Transit - #VAN04", license_plate: "F12-332-NY", type: "Van", max_capacity: 1500, odometer: 45000 },
-            { name: "Kenworth T680 - #301", license_plate: "K99-112-TX", type: "Truck", max_capacity: 22000, odometer: 175000 },
-            { name: "Volvo VNL - #410", license_plate: "V22-118-CA", type: "Truck", max_capacity: 19000, odometer: 142000 },
-            { name: "Ram ProMaster - #VAN09", license_plate: "R44-991-FL", type: "Van", max_capacity: 1800, odometer: 62000 },
-            { name: "Peterbilt 579 - #550", license_plate: "P11-223-AZ", type: "Truck", max_capacity: 24000, odometer: 198000 },
+            { name: "Volvo FH16 - #402", license_plate: "V78-992-KL", type: "Truck", max_capacity: 18000, odometer: 125000, region: "North West" },
+            { name: "Mercedes Actros - #205", license_plate: "M45-123-ZZ", type: "Truck", max_capacity: 15000, odometer: 98000, region: "East Coast" },
+            { name: "Scania R500 - #112", license_plate: "S88-554-PL", type: "Truck", max_capacity: 20000, odometer: 210000, region: "South" },
+            { name: "Ford Transit - #VAN04", license_plate: "F12-332-NY", type: "Van", max_capacity: 1500, odometer: 45000, region: "East Coast" },
+            { name: "Kenworth T680 - #301", license_plate: "K99-112-TX", type: "Truck", max_capacity: 22000, odometer: 175000, region: "South West" },
+            { name: "Volvo VNL - #410", license_plate: "V22-118-CA", type: "Truck", max_capacity: 19000, odometer: 142000, region: "North West" },
+            { name: "Ram ProMaster - #VAN09", license_plate: "R44-991-FL", type: "Van", max_capacity: 1800, odometer: 62000, region: "South East" },
+            { name: "Peterbilt 579 - #550", license_plate: "P11-223-AZ", type: "Truck", max_capacity: 24000, odometer: 198000, region: "South West" },
         ];
 
         for (const v of defaults) {

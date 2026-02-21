@@ -3,6 +3,7 @@ import Login from './pages/Login'
 import Signup from './pages/Signup'
 import Landing from './pages/Landing'
 import MaintenanceLogs from './pages/MaintenanceLogs'
+import TripDispatcher from './pages/TripDispatcher'
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
       <Route path="/signup" element={<Signup />} />
       <Route path="/" element={<Landing />} />
       <Route path="/maintenance" element={<MaintenanceLogs />} />
+      <Route path="/dispatch" element={<TripDispatcher />} />
       <Route path="*" element={<Navigate to="/login" replace />} />
     </Routes>
   )

@@ -6,7 +6,7 @@ const router = express.Router();
 
 // @route   GET /api/vehicles
 // @desc    List all vehicles
-router.get("/", auth, async (req, res) => {
+router.get("/", async (req, res) => {
     try {
         const vehicles = await Vehicle.findAll();
         res.json(vehicles);
@@ -16,17 +16,29 @@ router.get("/", auth, async (req, res) => {
     }
 });
 
+// @route   GET /api/vehicles/available
+// @desc    List only available vehicles (for dispatch dropdown)
+router.get("/available", async (req, res) => {
+    try {
+        const vehicles = await Vehicle.findAvailable();
+        res.json(vehicles);
+    } catch (err) {
+        console.error("Available vehicles error:", err.message);
+        res.status(500).json({ message: "Server error fetching available vehicles" });
+    }
+});
+
 // @route   POST /api/vehicles
 // @desc    Create a new vehicle
 router.post("/", auth, async (req, res) => {
     try {
-        const { name, license_plate, type, max_capacity, odometer } = req.body;
+        const { name, license_plate, type, max_capacity, odometer, region } = req.body;
 
         if (!name || !license_plate) {
             return res.status(400).json({ message: "Name and license plate are required" });
         }
 
-        const vehicle = await Vehicle.create({ name, license_plate, type, max_capacity, odometer });
+        const vehicle = await Vehicle.create({ name, license_plate, type, max_capacity, odometer, region });
         res.status(201).json(vehicle);
     } catch (err) {
         if (err.code === "23505") {
