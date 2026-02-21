@@ -4,7 +4,7 @@ const dotenv = require("dotenv");
 const path = require("path");
 
 // Load environment variables from repo root (server is run from /server subfolder)
-dotenv.config({ path: path.resolve(__dirname, ".env.local") });
+dotenv.config({ path: path.resolve(__dirname, "../.env") });
 
 const apiRoutes = require("./routes/api");
 const authRoutes = require("./routes/auth");
