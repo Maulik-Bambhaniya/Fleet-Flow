@@ -53,12 +53,14 @@ function VehicleRegistry() {
     const [searchQuery, setSearchQuery] = useState('')
     const [currentPage, setCurrentPage] = useState(1)
     const [showModal, setShowModal] = useState(false)
+    const [editingVehicle, setEditingVehicle] = useState(null)
     const [formData, setFormData] = useState({
         license_plate: '',
         max_capacity: '',
         odometer: '',
         type: '',
-        name: ''
+        name: '',
+        region: ''
     })
     const itemsPerPage = 6
 
@@ -164,26 +166,81 @@ function VehicleRegistry() {
         }
     }
 
+    // Handle status change
+    const handleStatusChange = (vehicleId, newStatus) => {
+        // Update in state
+        setVehicles(prev => prev.map(v => 
+            v.id === vehicleId ? { ...v, status: newStatus } : v
+        ))
+
+        // Update in localStorage if it's a local vehicle
+        const localVehicles = JSON.parse(localStorage.getItem('localVehicles') || '[]')
+        const updatedLocalVehicles = localVehicles.map(v => 
+            v.id === vehicleId ? { ...v, status: newStatus } : v
+        )
+        localStorage.setItem('localVehicles', JSON.stringify(updatedLocalVehicles))
+
+        // TODO: If it's an API vehicle, you could also send a PATCH request to update the backend
+    }
+
+    // Edit vehicle handler
+    const handleEditVehicle = (vehicle) => {
+        openModal(vehicle)
+    }
+
+    // Delete vehicle handler
+    const handleDeleteVehicle = (vehicleId) => {
+        if (!confirm('Are you sure you want to delete this vehicle?')) {
+            return
+        }
+
+        // Remove from state
+        setVehicles(prev => prev.filter(v => v.id !== vehicleId))
+
+        // Remove from localStorage if it's a local vehicle
+        const localVehicles = JSON.parse(localStorage.getItem('localVehicles') || '[]')
+        const updatedLocalVehicles = localVehicles.filter(v => v.id !== vehicleId)
+        localStorage.setItem('localVehicles', JSON.stringify(updatedLocalVehicles))
+
+        // TODO: If it's an API vehicle, send a DELETE request to the backend
+    }
+
     // Modal handlers
-    const openModal = () => {
+    const openModal = (vehicle = null) => {
         setShowModal(true)
-        setFormData({
-            license_plate: '',
-            max_capacity: '',
-            odometer: '',
-            type: '',
-            name: ''
-        })
+        if (vehicle) {
+            setEditingVehicle(vehicle)
+            setFormData({
+                license_plate: vehicle.license_plate,
+                max_capacity: vehicle.max_capacity.toString(),
+                odometer: vehicle.odometer.toString(),
+                type: vehicle.type,
+                name: vehicle.name,
+                region: vehicle.region || ''
+            })
+        } else {
+            setEditingVehicle(null)
+            setFormData({
+                license_plate: '',
+                max_capacity: '',
+                odometer: '',
+                type: '',
+                name: '',
+                region: ''
+            })
+        }
     }
 
     const closeModal = () => {
         setShowModal(false)
+        setEditingVehicle(null)
         setFormData({
             license_plate: '',
             max_capacity: '',
             odometer: '',
             type: '',
-            name: ''
+            name: '',
+            region: ''
         })
     }
 
@@ -197,35 +254,60 @@ function VehicleRegistry() {
 
     const handleSaveVehicle = () => {
         // Validate required fields
-        if (!formData.license_plate || !formData.max_capacity || !formData.odometer || !formData.type || !formData.name) {
+        if (!formData.license_plate || !formData.max_capacity || !formData.odometer || !formData.type || !formData.name || !formData.region) {
             alert('Please fill in all fields')
             return
         }
 
-        // Create new vehicle object
-        const newVehicle = {
-            id: `local-${Date.now()}`,
-            name: formData.name,
-            license_plate: formData.license_plate,
-            type: formData.type,
-            max_capacity: parseFloat(formData.max_capacity),
-            odometer: parseFloat(formData.odometer),
-            status: 'Available',
-            region: 'Unassigned',
-            created_at: new Date().toISOString()
-        }
+        if (editingVehicle) {
+            // Update existing vehicle
+            const updatedVehicle = {
+                ...editingVehicle,
+                name: formData.name,
+                license_plate: formData.license_plate,
+                type: formData.type,
+                max_capacity: parseFloat(formData.max_capacity),
+                odometer: parseFloat(formData.odometer),
+                region: formData.region
+            }
 
-        // Get existing localStorage vehicles
-        const localVehicles = JSON.parse(localStorage.getItem('localVehicles') || '[]')
-        
-        // Add new vehicle
-        const updatedVehicles = [...localVehicles, newVehicle]
-        
-        // Save to localStorage
-        localStorage.setItem('localVehicles', JSON.stringify(updatedVehicles))
-        
-        // Update state
-        setVehicles(prev => [...prev, newVehicle])
+            // Update in state
+            setVehicles(prev => prev.map(v => v.id === editingVehicle.id ? updatedVehicle : v))
+
+            // Update in localStorage if it's a local vehicle
+            const localVehicles = JSON.parse(localStorage.getItem('localVehicles') || '[]')
+            const updatedLocalVehicles = localVehicles.map(v => 
+                v.id === editingVehicle.id ? updatedVehicle : v
+            )
+            localStorage.setItem('localVehicles', JSON.stringify(updatedLocalVehicles))
+
+            // TODO: If it's an API vehicle, send a PATCH request to update the backend
+        } else {
+            // Create new vehicle object
+            const newVehicle = {
+                id: `local-${Date.now()}`,
+                name: formData.name,
+                license_plate: formData.license_plate,
+                type: formData.type,
+                max_capacity: parseFloat(formData.max_capacity),
+                odometer: parseFloat(formData.odometer),
+                status: 'Available',
+                region: formData.region,
+                created_at: new Date().toISOString()
+            }
+
+            // Get existing localStorage vehicles
+            const localVehicles = JSON.parse(localStorage.getItem('localVehicles') || '[]')
+            
+            // Add new vehicle
+            const updatedVehicles = [...localVehicles, newVehicle]
+            
+            // Save to localStorage
+            localStorage.setItem('localVehicles', JSON.stringify(updatedVehicles))
+            
+            // Update state
+            setVehicles(prev => [...prev, newVehicle])
+        }
         
         // Close modal
         closeModal()
@@ -294,17 +376,6 @@ function VehicleRegistry() {
                         <span className="vr-breadcrumb-current">Vehicle Registry</span>
                     </div>
 
-                    <div className="vr-search-wrapper">
-                        <span className="material-symbols-outlined vr-search-icon">search</span>
-                        <input
-                            type="text"
-                            className="vr-search-input"
-                            placeholder="Search vehicles, plates, or status..."
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                        />
-                    </div>
-
                     <div className="vr-header-actions">
                         <button className="vr-notification-btn">
                             <span className="material-symbols-outlined">notifications</span>
@@ -339,12 +410,22 @@ function VehicleRegistry() {
                                 Manage your fleet inventory, track availability, and view vehicle details.
                             </p>
                         </div>
+                        <div className="vr-page-search">
+                            <span className="material-symbols-outlined vr-page-search-icon">search</span>
+                            <input
+                                type="text"
+                                className="vr-page-search-input"
+                                placeholder="Search vehicles, plates, or status..."
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                            />
+                        </div>
                         <div className="vr-page-actions">
                             <button className="vr-btn-secondary">
                                 <span className="material-symbols-outlined vr-btn-icon">filter_list</span>
                                 Filters
                             </button>
-                            <button className="vr-btn-primary" onClick={openModal}>
+                            <button className="vr-btn-primary" onClick={() => openModal()}>
                                 <span className="material-symbols-outlined vr-btn-icon">add</span>
                                 Add Vehicle
                             </button>
@@ -438,14 +519,34 @@ function VehicleRegistry() {
                                                         {vehicle.region || 'Unassigned'}
                                                     </td>
                                                     <td className="vr-table-cell">
-                                                        <span className={getStatusClass(vehicle.status)}>
-                                                            {vehicle.status}
-                                                        </span>
+                                                        <select
+                                                            className={`vr-status-select ${getStatusClass(vehicle.status)}`}
+                                                            value={vehicle.status}
+                                                            onChange={(e) => handleStatusChange(vehicle.id, e.target.value)}
+                                                        >
+                                                            <option value="Available">Available</option>
+                                                            <option value="On Trip">On Trip</option>
+                                                            <option value="In Shop">In Shop</option>
+                                                            <option value="Critical">Critical</option>
+                                                        </select>
                                                     </td>
                                                     <td className="vr-table-cell vr-table-cell-right">
-                                                        <button className="vr-action-btn">
-                                                            <span className="material-symbols-outlined">more_horiz</span>
-                                                        </button>
+                                                        <div className="vr-action-buttons">
+                                                            <button 
+                                                                className="vr-action-btn vr-edit-btn"
+                                                                onClick={() => handleEditVehicle(vehicle)}
+                                                                title="Edit vehicle"
+                                                            >
+                                                                <span className="material-symbols-outlined">edit</span>
+                                                            </button>
+                                                            <button 
+                                                                className="vr-action-btn vr-delete-btn"
+                                                                onClick={() => handleDeleteVehicle(vehicle.id)}
+                                                                title="Delete vehicle"
+                                                            >
+                                                                <span className="material-symbols-outlined">delete</span>
+                                                            </button>
+                                                        </div>
                                                     </td>
                                                 </tr>
                                             ))}
@@ -489,7 +590,7 @@ function VehicleRegistry() {
             {showModal && (
                 <div className="vr-modal-overlay" onClick={closeModal}>
                     <div className="vr-modal" onClick={(e) => e.stopPropagation()}>
-                        <h3 className="vr-modal-title">New Vehicle Registration</h3>
+                        <h3 className="vr-modal-title">{editingVehicle ? 'Edit Vehicle' : 'New Vehicle Registration'}</h3>
                         
                         <div className="vr-modal-form">
                             <div className="vr-form-group">
@@ -549,6 +650,18 @@ function VehicleRegistry() {
                                     value={formData.name}
                                     onChange={handleInputChange}
                                     placeholder="e.g., Volvo FH16-750"
+                                />
+                            </div>
+
+                            <div className="vr-form-group">
+                                <label className="vr-form-label">Region:</label>
+                                <input
+                                    type="text"
+                                    name="region"
+                                    className="vr-form-input"
+                                    value={formData.region}
+                                    onChange={handleInputChange}
+                                    placeholder="e.g., North West, South, East Coast"
                                 />
                             </div>
                         </div>
