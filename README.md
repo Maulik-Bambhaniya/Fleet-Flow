@@ -1,19 +1,19 @@
 # Fleet-Flow 🚀
 
-A modern full-stack MERN application with a separate **server/** (backend) and **client/** (frontend) folder structure.
+A modern full-stack application with a separate **server/** (backend) and **client/** (frontend) folder structure, powered by **Supabase** (PostgreSQL).
 
 ## Tech Stack
 
-| Layer    | Technology               |
-| -------- | ------------------------ |
-| Frontend | React 19 + Vite 7       |
-| Backend  | Node.js + Express 4     |
-| Database | MongoDB + Mongoose 8    |
+| Layer    | Technology                    |
+| -------- | ----------------------------- |
+| Frontend | React 19 + Vite 7            |
+| Backend  | Node.js + Express 4          |
+| Database | Supabase (PostgreSQL)        |
 
 ## Prerequisites
 
 - **Node.js** ≥ 18
-- **MongoDB** running locally on `mongodb://localhost:27017` (or update `server/.env`)
+- A free **Supabase** project → [supabase.com/dashboard](https://supabase.com/dashboard)
 
 ## Quick Start
 
@@ -21,7 +21,14 @@ A modern full-stack MERN application with a separate **server/** (backend) and *
 # 1. Install all dependencies (root + server + client)
 npm run install-all
 
-# 2. Start both servers with a single command
+# 2. Configure Supabase — edit server/.env:
+#    SUPABASE_URL=https://your-project.supabase.co
+#    SUPABASE_ANON_KEY=your-anon-key
+
+# 3. Create the users table in Supabase SQL Editor:
+#    (see server/models/User.js for the SQL)
+
+# 4. Start both servers
 npm run dev
 ```
 
@@ -36,8 +43,8 @@ Fleet-Flow/
 │   ├── src/
 │   └── package.json
 ├── server/          # Express backend
-│   ├── config/      # DB connection
-│   ├── models/      # Mongoose models
+│   ├── config/      # Supabase client
+│   ├── models/      # Table query helpers
 │   ├── routes/      # API routes
 │   └── package.json
 ├── package.json     # Root — runs both via concurrently
