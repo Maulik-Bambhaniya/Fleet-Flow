@@ -5,9 +5,11 @@ import Landing from './pages/Landing'
 import MaintenanceLogs from './pages/MaintenanceLogs'
 import CommandCenter from './pages/CommandCenter'
 import TripDispatcher from './pages/TripDispatcher'
-import VehicleRegistry from './pages/VehicleRegistry'
 import ExpensesFuel from './pages/ExpensesFuel'
+import VehicleRegistry from './pages/VehicleRegistry'
+import DriverProfiles from './pages/DriverProfiles'
 import Analytics from './pages/Analytics'
+
 
 function App() {
   return (
@@ -20,6 +22,7 @@ function App() {
       <Route path="/dashboard" element={<CommandCenter />} />
       <Route path="/dispatch" element={<TripDispatcher />} />
       <Route path="/expenses" element={<ExpensesFuel />} />
+      <Route path="/drivers" element={<DriverProfiles />} />
       <Route path="/analytics" element={<Analytics />} />
       <Route path="*" element={<Navigate to="/dashboard" replace />} />
     </Routes>
