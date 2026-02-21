@@ -13,7 +13,7 @@ export default function Analytics() {
     useEffect(() => {
         const fetchAnalytics = async () => {
             try {
-                const token = localStorage.getItem('token')
+                const token = sessionStorage.getItem('token') || localStorage.getItem('token')
                 const res = await fetch('http://localhost:5000/api/analytics', {
                     headers: { 'Authorization': `Bearer ${token}` }
                 })
