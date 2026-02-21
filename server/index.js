@@ -8,6 +8,7 @@ dotenv.config({ path: path.resolve(__dirname, ".env.local") });
 
 const apiRoutes = require("./routes/api");
 const authRoutes = require("./routes/auth");
+const maintenanceRoutes = require("./routes/maintenance");
 const tripRoutes = require("./routes/trips");
 const vehicleRoutes = require("./routes/vehicles");
 const driverRoutes = require("./routes/drivers");
@@ -16,6 +17,7 @@ const seed = require("./config/seed");
 
 const User = require("./models/User");
 const Vehicle = require("./models/Vehicle");
+const MaintenanceLog = require("./models/MaintenanceLog");
 const Driver = require("./models/Driver");
 const Trip = require("./models/Trip");
 
@@ -30,6 +32,7 @@ app.use(express.urlencoded({ extended: true }));
 // Routes
 app.use("/api", apiRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/maintenance", maintenanceRoutes);
 app.use("/api/trips", tripRoutes);
 app.use("/api/vehicles", vehicleRoutes);
 app.use("/api/drivers", driverRoutes);
@@ -45,13 +48,19 @@ const start = async () => {
     try {
         // Create tables in dependency order
         await User.createTable();
-        await Vehicle.createTable();   // must exist before Trip (FK)
+        await Vehicle.createTable();   // must exist before Trip (FK) and MaintenanceLog (FK)
         await Driver.createTable();
+        await MaintenanceLog.createTable();
         await Trip.createTable();
         console.log("Database tables verified");
 
-        // Seed initial data if tables are empty
-        await seed();
+        // Seed default data for development
+        await Vehicle.seedDefaults();
+        const vehicles = await Vehicle.findAll();
+        const vehicleMap = {};
+        vehicles.forEach((v) => { vehicleMap[v.license_plate] = v.id; });
+        await MaintenanceLog.seedDefaults(vehicleMap);
+        console.log("Seed data verified");
     } catch (err) {
         console.error("Setup warning:", err.message);
     }
