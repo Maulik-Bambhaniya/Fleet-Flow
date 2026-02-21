@@ -197,7 +197,7 @@ export default function Analytics() {
     }
 
     return (
-        <DashboardLayout breadcrumb={['Dashboard', 'Analytics & Reports']}>
+        <DashboardLayout>
             <div className="ana-content">
                 {/* Header */}
                 <div className="ana-header">

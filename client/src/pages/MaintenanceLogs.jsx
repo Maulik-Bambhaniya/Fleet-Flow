@@ -176,7 +176,7 @@ export default function MaintenanceLogs() {
     const av = avatarColor(user?.name || '')
 
     return (
-        <DashboardLayout breadcrumb={['Workspaces', 'Fleet Operations', 'Maintenance Logs']}>
+        <DashboardLayout>
             <main className="ml-content">
 
                     {/* ══ LEFT — Add Log Form ══ */}

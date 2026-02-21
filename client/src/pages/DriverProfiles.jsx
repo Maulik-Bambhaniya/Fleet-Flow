@@ -350,111 +350,112 @@ function ViewProfileModal({ driver, onClose }) {
   const statusCfg = getStatusConfig(driver.status)
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg">
-        {/* Header Band */}
-        <div className="h-24 rounded-t-2xl bg-gradient-to-r from-[#2F3A45] to-[#4a5568] relative">
-          <button
-            onClick={onClose}
-            className="absolute top-4 right-4 p-1.5 rounded-full bg-white/20 hover:bg-white/30 text-white transition-colors"
-          >
-            <span className="material-symbols-outlined text-[18px]">close</span>
-          </button>
-        </div>
-
-        {/* Avatar */}
-        <div className="flex justify-center -mt-10 mb-3">
-          <div
-            className="w-20 h-20 rounded-full flex items-center justify-center text-xl font-bold border-4 border-white shadow-md"
-            style={{ background: avatar.bg, color: avatar.text }}
-          >
-            {driver.initials}
-          </div>
-        </div>
-
-        {/* Name & Status */}
-        <div className="text-center px-6 pb-2">
-          <h2 className="text-xl font-semibold text-[#1A1A1A]">{driver.name}</h2>
-          <p className="text-sm text-[#5A5A5A] mt-0.5">{driver.id}</p>
-          <span
-            className="inline-flex items-center mt-2 px-3 py-0.5 rounded-full text-xs font-medium"
-            style={{ background: statusCfg.bg, color: statusCfg.text }}
-          >
-            {driver.status}
-          </span>
-        </div>
-
-        {/* Stats Grid */}
-        <div className="grid grid-cols-3 gap-px bg-[#E6E6E6] mx-6 mt-4 rounded-xl overflow-hidden">
-          <div className="bg-white p-4 text-center">
-            <div className="text-xl font-bold text-[#1A1A1A]">{driver.experience}</div>
-            <div className="text-xs text-[#5A5A5A] mt-0.5">Yrs Experience</div>
-          </div>
-          <div className="bg-white p-4 text-center">
-            <div className="text-xl font-bold" style={{ color: scoreColor.text }}>{driver.safetyScore}</div>
-            <div className="text-xs text-[#5A5A5A] mt-0.5">Safety Score</div>
-          </div>
-          <div className="bg-white p-4 text-center">
-            <div className="text-xl font-bold" style={{ color: licCfg.color }}>
-              <span className="material-symbols-outlined text-xl" style={{ fontVariationSettings: "'FILL' 1" }}>
-                {licCfg.icon}
-              </span>
-            </div>
-            <div className="text-xs text-[#5A5A5A] mt-0.5">License</div>
-          </div>
-        </div>
-
-        {/* Safety Score Bar */}
-        <div className="mx-6 mt-5">
-          <div className="flex justify-between items-center mb-2">
-            <span className="text-sm font-medium text-[#5A5A5A]">Safety Score</span>
-            <span className="text-sm font-bold" style={{ color: scoreColor.text }}>{driver.safetyScore}/100</span>
-          </div>
-          <div className="w-full bg-gray-100 rounded-full h-2.5">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4"
+      onClick={onClose}
+    >
+      <div
+        className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* ── Modal Header ── */}
+        <div className="flex items-center justify-between px-6 py-4 border-b border-[#E6E6E6]">
+          <div className="flex items-center gap-3">
             <div
-              className="h-2.5 rounded-full transition-all duration-500"
-              style={{ width: `${driver.safetyScore}%`, background: scoreColor.bar }}
-            />
-          </div>
-        </div>
-
-        {/* Last Incident */}
-        <div className="mx-6 mt-4 p-3.5 rounded-xl bg-[#F7F7F5] border border-[#E6E6E6]">
-          <div className="flex items-start gap-2">
-            <span className="material-symbols-outlined text-[18px] text-[#5A5A5A] mt-0.5">history</span>
+              className="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold select-none flex-shrink-0"
+              style={{ background: avatar.bg, color: avatar.text }}
+            >
+              {driver.initials}
+            </div>
             <div>
-              <div className="text-xs font-semibold text-[#5A5A5A] uppercase tracking-wide mb-0.5">Last Incident</div>
-              <div
-                className="text-sm font-medium"
-                style={{ color: driver.safetyScore < 50 ? '#C53030' : '#1A1A1A' }}
-              >
-                {driver.lastIncident}
-              </div>
+              <h2 className="text-base font-semibold text-[#1A1A1A] leading-tight">{driver.name}</h2>
+              <p className="text-xs text-[#9CA3AF] mt-0.5">{driver.id}</p>
             </div>
           </div>
-        </div>
-
-        {/* License Status */}
-        <div className="mx-6 mt-3 mb-6 p-3.5 rounded-xl bg-[#F7F7F5] border border-[#E6E6E6]">
           <div className="flex items-center gap-2">
             <span
-              className="material-symbols-outlined text-[18px]"
+              className="text-xs font-medium px-2.5 py-0.5 rounded-full"
+              style={{ background: statusCfg.bg, color: statusCfg.text }}
+            >
+              {driver.status}
+            </span>
+            <button
+              onClick={onClose}
+              className="p-1.5 rounded-full hover:bg-gray-100 text-[#9CA3AF] hover:text-[#1A1A1A] transition-colors"
+            >
+              <span className="material-symbols-outlined text-[18px]">close</span>
+            </button>
+          </div>
+        </div>
+
+        {/* ── Stats Row ── */}
+        <div className="grid grid-cols-3 divide-x divide-[#E6E6E6] border-b border-[#E6E6E6]">
+          <div className="flex flex-col items-center py-5 px-3">
+            <span className="text-2xl font-bold text-[#1A1A1A]">{driver.experience}</span>
+            <span className="text-xs text-[#9CA3AF] mt-1 text-center">Yrs Experience</span>
+          </div>
+          <div className="flex flex-col items-center py-5 px-3">
+            <span className="text-2xl font-bold" style={{ color: scoreColor.text }}>{driver.safetyScore}</span>
+            <span className="text-xs text-[#9CA3AF] mt-1 text-center">Safety Score</span>
+          </div>
+          <div className="flex flex-col items-center py-5 px-3">
+            <span
+              className="material-symbols-outlined text-2xl"
+              style={{ color: licCfg.color, fontVariationSettings: "'FILL' 1" }}
+            >
+              {licCfg.icon}
+            </span>
+            <span className="text-xs text-[#9CA3AF] mt-1 text-center">License</span>
+          </div>
+        </div>
+
+        {/* ── Body ── */}
+        <div className="px-6 py-5 space-y-4">
+          {/* Safety Score Bar */}
+          <div>
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-sm font-medium text-[#5A5A5A]">Safety Score</span>
+              <span className="text-sm font-bold" style={{ color: scoreColor.text }}>{driver.safetyScore}/100</span>
+            </div>
+            <div className="w-full bg-gray-100 rounded-full h-2">
+              <div
+                className="h-2 rounded-full transition-all duration-700"
+                style={{ width: `${driver.safetyScore}%`, background: scoreColor.bar }}
+              />
+            </div>
+          </div>
+
+          {/* Last Incident */}
+          <div className="flex items-start gap-3 rounded-xl bg-gray-50 border border-gray-100 px-4 py-3.5">
+            <span className="material-symbols-outlined text-[18px] text-[#9CA3AF] mt-0.5 flex-shrink-0">history</span>
+            <div>
+              <p className="text-[10px] font-semibold text-[#9CA3AF] uppercase tracking-widest mb-1">Last Incident</p>
+              <p className="text-sm font-medium" style={{ color: driver.safetyScore < 50 ? '#C53030' : '#1A1A1A' }}>
+                {driver.lastIncident}
+              </p>
+            </div>
+          </div>
+
+          {/* License Status */}
+          <div className="flex items-start gap-3 rounded-xl bg-gray-50 border border-gray-100 px-4 py-3.5">
+            <span
+              className="material-symbols-outlined text-[18px] mt-0.5 flex-shrink-0"
               style={{ color: licCfg.color, fontVariationSettings: "'FILL' 1" }}
             >
               {licCfg.icon}
             </span>
             <div>
-              <div className="text-xs font-semibold text-[#5A5A5A] uppercase tracking-wide mb-0.5">License Status</div>
-              <div className="text-sm font-medium" style={{ color: licCfg.color }}>{licCfg.label}</div>
+              <p className="text-[10px] font-semibold text-[#9CA3AF] uppercase tracking-widest mb-1">License Status</p>
+              <p className="text-sm font-medium" style={{ color: licCfg.color }}>{licCfg.label}</p>
             </div>
           </div>
         </div>
 
-        {/* Close */}
+        {/* ── Footer ── */}
         <div className="px-6 pb-6">
           <button
             onClick={onClose}
-            className="w-full py-2.5 bg-[#2F3A45] text-white rounded-lg text-sm font-medium hover:bg-[#1f262e] transition-colors"
+            className="w-full py-2.5 bg-[#2F3A45] hover:bg-[#1f262e] text-white rounded-xl text-sm font-medium transition-colors"
           >
             Close Profile
           </button>
@@ -476,94 +477,90 @@ function DriverCard({ driver, onViewProfile }) {
 
   return (
     <div
-      className={`
-        bg-white border rounded-[10px] shadow-sm p-6 hover:shadow-md transition-shadow cursor-pointer group
-        ${isSuspended ? 'border-l-4 border-l-[#C53030] border-[#E6E6E6]' : 'border-[#E6E6E6]'}
-      `}
+      className="bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer overflow-hidden flex flex-col"
+      style={{
+        border: '1px solid #E6E6E6',
+        borderLeft: isSuspended ? '4px solid #C53030' : '1px solid #E6E6E6',
+      }}
       onClick={() => onViewProfile(driver)}
     >
-      {/* Top Row */}
-      <div className="flex justify-between items-start mb-4">
-        <div className="flex items-center gap-3">
-          <div
-            className="w-12 h-12 rounded-full flex items-center justify-center text-base font-bold flex-shrink-0 border border-white shadow-sm"
-            style={{
-              background: avatar.bg,
-              color: avatar.text,
-              filter: isSuspended ? 'grayscale(1)' : 'none',
-            }}
-          >
-            {driver.initials}
-          </div>
-          <div>
-            <h3 className="font-semibold text-[#1A1A1A] text-[15px] leading-tight">{driver.name}</h3>
-            <p className="text-[12px] text-[#5A5A5A] mt-0.5">ID: {driver.id}</p>
-          </div>
-        </div>
-        <span
-          className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium flex-shrink-0"
-          style={{ background: statusCfg.bg, color: statusCfg.text }}
-        >
-          {driver.status}
-        </span>
-      </div>
-
-      {/* Details */}
-      <div className="space-y-3">
-        {/* License */}
-        <div className="flex justify-between items-center py-2 border-b border-gray-100">
-          <span className="text-[13px] text-[#5A5A5A]">License Status</span>
-          <span
-            className="text-[13px] font-medium flex items-center gap-1"
-            style={{ color: licCfg.color }}
-          >
-            <span
-              className="material-symbols-outlined text-[14px]"
-              style={{ fontVariationSettings: "'FILL' 1" }}
+      {/* ── Header ── */}
+      <div className="p-5 flex-1">
+        {/* Avatar + Name + Status badge */}
+        <div className="flex items-start justify-between gap-2 mb-4">
+          <div className="flex items-center gap-3 min-w-0">
+            <div
+              className="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0 select-none"
+              style={{
+                background: isSuspended ? '#F3F4F6' : avatar.bg,
+                color: isSuspended ? '#9CA3AF' : avatar.text,
+              }}
             >
-              {licCfg.icon}
-            </span>
-            {licCfg.label}
+              {driver.initials}
+            </div>
+            <div className="min-w-0">
+              <h3 className="text-sm font-semibold text-[#1A1A1A] truncate leading-snug">{driver.name}</h3>
+              <p className="text-xs text-[#9CA3AF] mt-0.5">{driver.id}</p>
+            </div>
+          </div>
+          <span
+            className="flex-shrink-0 text-xs font-medium px-2.5 py-0.5 rounded-full"
+            style={{ background: statusCfg.bg, color: statusCfg.text }}
+          >
+            {driver.status}
           </span>
         </div>
 
-        {/* Experience */}
-        <div className="flex justify-between items-center py-2 border-b border-gray-100">
-          <span className="text-[13px] text-[#5A5A5A]">Experience</span>
-          <span className="text-[13px] font-medium text-[#1A1A1A]">{driver.experience} Yr{driver.experience !== 1 ? 's' : ''}</span>
+        {/* Divider */}
+        <div className="h-px bg-gray-100 mb-4" />
+
+        {/* Info Rows */}
+        <div className="space-y-3 mb-4">
+          <div className="flex items-center justify-between">
+            <span className="text-xs text-[#9CA3AF]">License</span>
+            <span className="text-xs font-medium flex items-center gap-1" style={{ color: licCfg.color }}>
+              <span className="material-symbols-outlined text-[13px]" style={{ fontVariationSettings: "'FILL' 1" }}>
+                {licCfg.icon}
+              </span>
+              {licCfg.label}
+            </span>
+          </div>
+          <div className="flex items-center justify-between">
+            <span className="text-xs text-[#9CA3AF]">Experience</span>
+            <span className="text-xs font-medium text-[#1A1A1A]">
+              {driver.experience} yr{driver.experience !== 1 ? 's' : ''}
+            </span>
+          </div>
         </div>
 
-        {/* Safety Score */}
-        <div className="pt-2">
-          <div className="flex justify-between items-center mb-2">
-            <span className="text-[13px] text-[#5A5A5A] font-medium">Safety Score</span>
-            <span className="text-[14px] font-bold" style={{ color: scoreColor.text }}>
+        {/* Safety Score Block */}
+        <div className="rounded-lg bg-gray-50 border border-gray-100 px-3.5 py-3">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-xs text-[#5A5A5A] font-medium">Safety Score</span>
+            <span className="text-xs font-bold" style={{ color: scoreColor.text }}>
               {driver.safetyScore}/100
             </span>
           </div>
-          <div className="w-full bg-gray-100 rounded-full h-2">
+          <div className="w-full bg-gray-200 rounded-full h-1.5 mb-2">
             <div
-              className="h-2 rounded-full transition-all duration-500"
+              className="h-1.5 rounded-full transition-all duration-500"
               style={{ width: `${driver.safetyScore}%`, background: scoreColor.bar }}
             />
           </div>
-          <p
-            className="text-[11px] mt-2"
-            style={{ color: driver.safetyScore < 50 ? '#C53030' : '#9ca3af' }}
-          >
+          <p className="text-[11px] leading-tight truncate" style={{ color: driver.safetyScore < 60 ? '#C53030' : '#9CA3AF' }}>
             {driver.lastIncident}
           </p>
         </div>
       </div>
 
-      {/* Footer */}
-      <div className="mt-5 pt-4 border-t border-[#E6E6E6] flex justify-end">
+      {/* ── Footer ── */}
+      <div className="px-5 py-3 border-t border-gray-100 bg-gray-50 flex items-center justify-end">
         <button
-          className="text-[13px] font-medium text-[#5A5A5A] hover:text-[#2F3A45] flex items-center gap-1 group-hover:underline"
+          className="text-xs font-medium text-[#5A5A5A] hover:text-[#2F3A45] flex items-center gap-1 transition-colors"
           onClick={(e) => { e.stopPropagation(); onViewProfile(driver) }}
         >
           View Profile
-          <span className="material-symbols-outlined text-[14px]">arrow_forward</span>
+          <span className="material-symbols-outlined text-[13px]">chevron_right</span>
         </button>
       </div>
     </div>
@@ -631,7 +628,7 @@ export default function DriverProfiles() {
   const activeFiltersCount = [filterStatus !== 'All', filterLicense !== 'All'].filter(Boolean).length
 
   return (
-    <DashboardLayout breadcrumb={['Workspaces', 'Fleet Operations', 'Driver Profiles & Safety']}>
+    <DashboardLayout>
       {/* ── Page Header ── */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <div>

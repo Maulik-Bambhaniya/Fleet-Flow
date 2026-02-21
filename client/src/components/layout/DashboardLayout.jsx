@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Sidebar from './Sidebar'
 
-export default function DashboardLayout({ children, breadcrumb }) {
+export default function DashboardLayout({ children, fitPage = false }) {
   const navigate = useNavigate()
   const [searchQuery, setSearchQuery] = useState('')
   const [searchResults, setSearchResults] = useState(null)
@@ -90,19 +90,7 @@ export default function DashboardLayout({ children, breadcrumb }) {
       <main className="flex-1 ml-[240px] flex flex-col h-full relative">
         {/* Header */}
         <header className="h-16 bg-white border-b border-[#E6E6E6] flex items-center justify-between px-6 sticky top-0 z-40 shadow-sm">
-          {/* Breadcrumb */}
-          <div className="flex items-center text-sm text-[#5A5A5A]">
-            {breadcrumb?.map((crumb, i) => (
-              <span key={i} className="flex items-center">
-                {i > 0 && (
-                  <span className="material-symbols-outlined text-base mx-2 text-gray-400">chevron_right</span>
-                )}
-                <span className={i === breadcrumb.length - 1 ? 'font-medium text-[#1A1A1A]' : 'hover:text-[#1A1A1A] cursor-pointer'}>
-                  {crumb}
-                </span>
-              </span>
-            ))}
-          </div>
+          <div />
 
           {/* Search */}
           <div className="flex-1 max-w-lg mx-8 relative hidden sm:block" ref={searchRef}>
@@ -287,7 +275,10 @@ export default function DashboardLayout({ children, breadcrumb }) {
         </header>
 
         {/* Page content */}
-        <div className="flex-1 overflow-y-auto p-4 sm:p-8">
+        <div className={fitPage
+          ? 'flex-1 overflow-hidden flex flex-col min-h-0'
+          : 'flex-1 overflow-y-auto p-4 sm:p-8'
+        }>
           {children}
         </div>
       </main>

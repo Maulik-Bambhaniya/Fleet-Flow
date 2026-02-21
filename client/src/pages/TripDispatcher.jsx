@@ -239,8 +239,8 @@ export default function TripDispatcher() {
 
     // ═══════════════════════════════════════
     return (
-        <DashboardLayout breadcrumb={['Workspaces', 'Fleet Operations', 'Trip Dispatcher']}>
-            <main className="td-content">
+        <DashboardLayout fitPage>
+            <div className="td-content">
 
                     {/* ══ LEFT — Dispatch Form ══ */}
                     <div className="td-panel-left">
@@ -426,7 +426,7 @@ export default function TripDispatcher() {
                                     <p>Monitor real-time status of ongoing trips.</p>
                                 </div>
                                 <div className="td-table-head-right">
-                                    <div className="td-topbar-search" style={{ marginRight: 8 }}>
+                                    <div className="td-topbar-search">
                                         <span className="material-symbols-outlined">search</span>
                                         <input
                                             type="text"
@@ -461,6 +461,14 @@ export default function TripDispatcher() {
 
                             <div className="td-table-wrap">
                                 <table className="td-table">
+                                    <colgroup>
+                                        <col style={{ width: '11%' }} />
+                                        <col style={{ width: '26%' }} />
+                                        <col style={{ width: '20%' }} />
+                                        <col style={{ width: '18%' }} />
+                                        <col style={{ width: '13%' }} />
+                                        <col style={{ width: '12%' }} />
+                                    </colgroup>
                                     <thead>
                                         <tr>
                                             <th>Trip ID</th>
@@ -525,7 +533,9 @@ export default function TripDispatcher() {
                                                             <td>
                                                                 <div className="td-vehicle-cell">
                                                                     <span className="material-symbols-outlined">local_shipping</span>
-                                                                    {trip.vehicle_name || <em style={{ color: '#9ca3af' }}>Unassigned</em>}
+                                                                    {trip.vehicle_name
+                                                                        ? <span className="td-vehicle-cell-name">{trip.vehicle_name}</span>
+                                                                        : <em style={{ color: '#9ca3af' }}>Unassigned</em>}
                                                                 </div>
                                                             </td>
                                                             <td>
@@ -534,11 +544,11 @@ export default function TripDispatcher() {
                                                                         <div className="td-driver-cell">
                                                                             <div
                                                                                 className="td-driver-avatar"
-                                                                                style={{ background: av.bg, color: av.text }}
+                                                                                style={{ background: av.bg, color: av.text, flexShrink: 0 }}
                                                                             >
                                                                                 {initials}
                                                                             </div>
-                                                                            {trip.driver_name}
+                                                                            <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: 120 }}>{trip.driver_name}</span>
                                                                         </div>
                                                                     )
                                                                     : <em style={{ color: '#9ca3af' }}>Unassigned</em>
@@ -620,7 +630,8 @@ export default function TripDispatcher() {
                         </div>
                     </div>
 
-            </main>
+            </div>
+
         </DashboardLayout>
     )
 }

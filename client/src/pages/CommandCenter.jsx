@@ -58,8 +58,14 @@ export default function CommandCenter() {
 
   const totalPages = Math.ceil(totalVehicles / limit)
   const fleetTotal = fleet.total || 1
+  const totalPages = Math.ceil(totalVehicles / limit)
+  const fleetTotal = fleet.total || 1
 
   // Conic gradient percentages
+  const avPct = Math.round((fleet.available / fleetTotal) * 100)
+  const otPct = Math.round((fleet.onTrip / fleetTotal) * 100)
+  const isPct = Math.round((fleet.inShop / fleetTotal) * 100)
+  const crPct = 100 - avPct - otPct - isPct
   const avPct = Math.round((fleet.available / fleetTotal) * 100)
   const otPct = Math.round((fleet.onTrip / fleetTotal) * 100)
   const isPct = Math.round((fleet.inShop / fleetTotal) * 100)
@@ -211,6 +217,9 @@ export default function CommandCenter() {
                 { color: '#2F3A45', label: 'On Trip', value: fleet.onTrip, pct: otPct },
                 { color: '#B7791F', label: 'In Shop', value: fleet.inShop, pct: isPct },
                 { color: '#C53030', label: 'Critical', value: fleet.critical, pct: crPct },
+                { color: '#2F3A45', label: 'On Trip', value: fleet.onTrip, pct: otPct },
+                { color: '#B7791F', label: 'In Shop', value: fleet.inShop, pct: isPct },
+                { color: '#C53030', label: 'Critical', value: fleet.critical, pct: crPct },
               ].map(({ color, label, value, pct }) => (
                 <div key={label} className="flex justify-between items-center text-sm">
                   <div className="flex items-center gap-2">
@@ -252,6 +261,7 @@ export default function CommandCenter() {
               </thead>
               <tbody className="text-sm">
                 {vehicles.map((v) => {
+                  const s = STATUS_CONFIG[v.status] || STATUS_CONFIG.available
                   const s = STATUS_CONFIG[v.status] || STATUS_CONFIG.available
                   const cap = v.capacity_percentage ?? 0
                   const capColorClass = v.capColor || (cap >= 90 ? 'bg-red-500' : cap >= 50 ? 'bg-blue-600' : 'bg-green-600')
