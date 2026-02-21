@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
-import { useNavigate, Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
+import DashboardLayout from '@/components/layout/DashboardLayout'
 import './VehicleRegistry.css'
 
 /* ═══════════════════════════════════════════════════
@@ -376,6 +377,17 @@ function VehicleRegistry() {
                         <span className="vr-breadcrumb-current">Vehicle Registry</span>
                     </div>
 
+                    <div className="vr-search-wrapper">
+                        <span className="material-symbols-outlined vr-search-icon">search</span>
+                        <input
+                            type="text"
+                            className="vr-search-input"
+                            placeholder="Search vehicles, plates, or status..."
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                        />
+                    </div>
+
                     <div className="vr-header-actions">
                         <button className="vr-notification-btn">
                             <span className="material-symbols-outlined">notifications</span>
@@ -583,8 +595,6 @@ function VehicleRegistry() {
                             </>
                         )}
                     </div>
-                </main>
-            </div>
 
             {/* ═══════ ADD VEHICLE MODAL ═══════ */}
             {showModal && (
@@ -677,7 +687,7 @@ function VehicleRegistry() {
                     </div>
                 </div>
             )}
-        </div>
+        </DashboardLayout>
     )
 }
 

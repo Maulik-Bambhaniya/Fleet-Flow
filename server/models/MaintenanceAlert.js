@@ -17,6 +17,20 @@ const MaintenanceAlert = {
     `)
   },
 
+  async seedDefaults() {
+    const { rows } = await pool.query('SELECT COUNT(*) FROM maintenance_alerts')
+    if (parseInt(rows[0].count) === 0) {
+      await pool.query(`
+        INSERT INTO maintenance_alerts (vehicle_name, type, description, severity, status) VALUES
+        ('Volvo VNL 860', 'Engine', 'Check engine light on', 'critical', 'pending'),
+        ('Freightliner Cascadia', 'Tires', 'Low pressure warning', 'warning', 'pending'),
+        ('Peterbilt 579', 'Oil', 'Scheduled oil change', 'info', 'completed'),
+        ('Kenworth T680', 'Brakes', 'Brake pad replacement needed', 'warning', 'pending'),
+        ('Mack Anthem', 'Coolant', 'Coolant temp high', 'critical', 'pending')
+      `)
+    }
+  },
+
   async getPendingCount() {
     const { rows } = await pool.query(
       "SELECT COUNT(*) FROM maintenance_alerts WHERE status = 'pending'"

@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react'
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
+import DashboardLayout from '@/components/layout/DashboardLayout'
 import './ExpensesFuel.css'
 
 /* ═══════════════════════════════════════════════════
@@ -56,22 +57,11 @@ function fmtDate(dateStr) {
 
 function uid() { return 'e' + Date.now() + Math.random().toString(36).slice(2, 6) }
 
-const NAV_ITEMS = [
-    { label: 'Command Center', icon: '📊', path: '/dashboard' },
-    { label: 'Vehicle Registry', icon: '🚛', path: '/vehicles' },
-    { label: 'Trip Dispatcher', icon: '🗺️', path: '/dispatch' },
-    { label: 'Maintenance Logs', icon: '🔧', path: '/maintenance' },
-    { label: 'Expenses & Fuel Logs', icon: '🧾', path: '/expenses' },
-    { label: 'Driver Profiles', icon: '👤', path: '/drivers' },
-    { label: 'Analytics & Reports', icon: '📈', path: '/analytics' },
-]
-
 /* ═══════════════════════════════════════════════════
    COMPONENT
    ═══════════════════════════════════════════════════ */
 export default function ExpensesFuel() {
     const navigate = useNavigate()
-    const location = useLocation()
 
     const user = { name: 'Alex Morgan', role: 'Finance Director' }
 
@@ -274,70 +264,7 @@ export default function ExpensesFuel() {
        RENDER
        ═══════════════════════════════════════════════ */
     return (
-        <div className="expenses-layout">
-            {/* ── Sidebar ── */}
-            <aside className="exp-sidebar">
-                <div className="exp-sidebar-logo">
-                    <div className="logo-icon">🚐</div>
-                    <div>
-                        FleetFlow
-                        <span className="logo-sub">Enterprise</span>
-                    </div>
-                </div>
-                <ul className="exp-sidebar-nav">
-                    {NAV_ITEMS.map((item) => (
-                        <li key={item.path}>
-                            <a
-                                href={item.path}
-                                className={location.pathname === item.path ? 'active' : ''}
-                                onClick={(e) => { e.preventDefault(); navigate(item.path) }}
-                            >
-                                <span className="nav-icon">{item.icon}</span>
-                                {item.label}
-                            </a>
-                        </li>
-                    ))}
-                </ul>
-                <div className="exp-sidebar-bottom">
-                    <ul className="exp-sidebar-nav">
-                        <li>
-                            <a href="/settings" onClick={e => e.preventDefault()}>
-                                <span className="nav-icon">⚙️</span> Settings
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </aside>
-
-            {/* ── Main Area ── */}
-            <main className="expenses-main">
-                {/* Topbar */}
-                <div className="exp-topbar">
-                    <div className="exp-breadcrumb">
-                        Financials <span>›</span> <span>Expenses &amp; Fuel Logs</span>
-                    </div>
-                    <div className="exp-search">
-                        <span className="s-icon">🔍</span>
-                        <input
-                            type="text"
-                            placeholder="Search by Trip ID, Vehicle, or Date..."
-                            value={search}
-                            onChange={(e) => setSearch(e.target.value)}
-                        />
-                    </div>
-                    <div className="exp-topbar-right">
-                        <button className="exp-bell">🔔<span className="badge" /></button>
-                        <div className="exp-user">
-                            <div className="exp-user-info">
-                                <div className="exp-user-name">{user.name}</div>
-                                <div className="exp-user-role">{user.role}</div>
-                            </div>
-                            <div className="exp-avatar">AM</div>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Content */}
+        <DashboardLayout breadcrumb={['Workspaces', 'Fleet Operations', 'Expenses & Fuel']}>
                 <div className="exp-content">
                     {/* Header */}
                     <div className="exp-header">
@@ -508,7 +435,6 @@ export default function ExpensesFuel() {
                         )}
                     </div>
                 </div>
-            </main>
 
             {/* ── Modal ── */}
             {showModal && (
@@ -588,6 +514,6 @@ export default function ExpensesFuel() {
 
             {/* Toast */}
             {toast && <div className={`exp-toast ${toast.type}`}>{toast.message}</div>}
-        </div>
+        </DashboardLayout>
     )
 }

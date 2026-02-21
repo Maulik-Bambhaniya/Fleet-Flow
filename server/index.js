@@ -24,6 +24,9 @@ const Driver = require("./models/Driver");
 const Trip = require("./models/Trip");
 const Expense = require("./models/Expense");
 const Analytics = require("./models/Analytics");
+const MaintenanceAlert = require("./models/MaintenanceAlert");
+const CargoOrder = require("./models/CargoOrder");
+const VehicleUtilization = require("./models/VehicleUtilization");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -60,6 +63,9 @@ const start = async () => {
         await Trip.createTable();
         await Expense.createTable();
         await Analytics.createTable();
+        await MaintenanceAlert.createTable();
+        await CargoOrder.createTable();
+        await VehicleUtilization.createTable();
         console.log("Database tables verified");
 
         // Seed default data for development
@@ -70,6 +76,11 @@ const start = async () => {
         await MaintenanceLog.seedDefaults(vehicleMap);
         await Expense.seedDefaults();
         await Analytics.seedDefaults();
+
+        if (typeof MaintenanceAlert.seedDefaults === 'function') await MaintenanceAlert.seedDefaults();
+        if (typeof CargoOrder.seedDefaults === 'function') await CargoOrder.seedDefaults();
+        if (typeof VehicleUtilization.seedDefaults === 'function') await VehicleUtilization.seedDefaults();
+
         console.log("Seed data verified");
     } catch (err) {
         console.error("Setup warning:", err.message);
