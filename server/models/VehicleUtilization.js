@@ -14,6 +14,22 @@ const VehicleUtilization = {
     `)
   },
 
+  async seedDefaults() {
+    const { rows } = await pool.query('SELECT COUNT(*) FROM vehicle_utilization')
+    if (parseInt(rows[0].count) === 0) {
+      await pool.query(`
+        INSERT INTO vehicle_utilization (date, utilized_count, total_count, utilization_percentage) VALUES
+        (CURRENT_DATE - INTERVAL '6 days', 18, 20, 90.00),
+        (CURRENT_DATE - INTERVAL '5 days', 19, 20, 95.00),
+        (CURRENT_DATE - INTERVAL '4 days', 17, 20, 85.00),
+        (CURRENT_DATE - INTERVAL '3 days', 16, 20, 80.00),
+        (CURRENT_DATE - INTERVAL '2 days', 20, 20, 100.00),
+        (CURRENT_DATE - INTERVAL '1 days', 19, 20, 95.00),
+        (CURRENT_DATE,                     18, 20, 90.00)
+      `)
+    }
+  },
+
   async getWeeklyData() {
     const { rows } = await pool.query(`
       SELECT

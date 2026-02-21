@@ -1,9 +1,9 @@
 import { Link, useLocation } from 'react-router-dom'
 
 const navItems = [
-  { icon: 'dashboard',      label: 'Command Center',  path: '/dashboard',   fill: true },
+  { icon: 'dashboard',      label: 'Dashboard',  path: '/dashboard',   fill: true },
   { icon: 'directions_car', label: 'Vehicle Registry', path: '/vehicles'              },
-  { icon: 'alt_route',      label: 'Trip Dispatcher',  path: '/trips'                 },
+  { icon: 'alt_route',      label: 'Trip Dispatcher',  path: '/dispatch'                 },
   { icon: 'build',          label: 'Maintenance Logs', path: '/maintenance'           },
   { icon: 'receipt_long',   label: 'Expenses & Fuel',  path: '/expenses'              },
   { icon: 'badge',          label: 'Driver Profiles',  path: '/drivers'               },
