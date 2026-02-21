@@ -4,6 +4,7 @@ import Signup from './pages/Signup'
 import Landing from './pages/Landing'
 import MaintenanceLogs from './pages/MaintenanceLogs'
 import TripDispatcher from './pages/TripDispatcher'
+import ExpensesFuel from './pages/ExpensesFuel'
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
       <Route path="/" element={<Landing />} />
       <Route path="/maintenance" element={<MaintenanceLogs />} />
       <Route path="/dispatch" element={<TripDispatcher />} />
+      <Route path="/expenses" element={<ExpensesFuel />} />
       <Route path="*" element={<Navigate to="/login" replace />} />
     </Routes>
   )
