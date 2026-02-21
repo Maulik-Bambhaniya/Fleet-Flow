@@ -14,6 +14,7 @@ const vehicleRoutes = require("./routes/vehicles");
 const driverRoutes = require("./routes/drivers");
 const expenseRoutes = require("./routes/expenses");
 const dashboardRoutes = require("./routes/dashboard");
+const analyticsRoutes = require("./routes/analytics");
 const seed = require("./config/seed");
 
 const User = require("./models/User");
@@ -22,6 +23,7 @@ const MaintenanceLog = require("./models/MaintenanceLog");
 const Driver = require("./models/Driver");
 const Trip = require("./models/Trip");
 const Expense = require("./models/Expense");
+const Analytics = require("./models/Analytics");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -40,6 +42,7 @@ app.use("/api/vehicles", vehicleRoutes);
 app.use("/api/drivers", driverRoutes);
 app.use("/api/expenses", expenseRoutes);
 app.use("/api/dashboard", dashboardRoutes);
+app.use("/api/analytics", analyticsRoutes);
 
 // Root
 app.get("/", (req, res) => {
@@ -56,6 +59,7 @@ const start = async () => {
         await MaintenanceLog.createTable();
         await Trip.createTable();
         await Expense.createTable();
+        await Analytics.createTable();
         console.log("Database tables verified");
 
         // Seed default data for development
@@ -65,6 +69,7 @@ const start = async () => {
         vehicles.forEach((v) => { vehicleMap[v.license_plate] = v.id; });
         await MaintenanceLog.seedDefaults(vehicleMap);
         await Expense.seedDefaults();
+        await Analytics.seedDefaults();
         console.log("Seed data verified");
     } catch (err) {
         console.error("Setup warning:", err.message);
