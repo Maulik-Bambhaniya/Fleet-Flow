@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useMemo } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
+import DashboardLayout from '@/components/layout/DashboardLayout'
 import './MaintenanceLogs.css'
 
 // ── helpers ──
@@ -175,80 +176,8 @@ export default function MaintenanceLogs() {
     const av = avatarColor(user?.name || '')
 
     return (
-        <div className="ml-shell">
-
-            {/* ══ SIDEBAR ══ */}
-            <aside className="ml-sidebar">
-                <div className="ml-sidebar-header">
-                    <div className="ml-sidebar-logo">
-                        <span className="material-symbols-outlined">local_shipping</span>
-                    </div>
-                    <div className="ml-sidebar-brand">
-                        <h1>FleetFlow</h1>
-                        <p>ENTERPRISE LOGISTICS</p>
-                    </div>
-                </div>
-
-                <nav className="ml-sidebar-nav">
-                    {NAV_ITEMS.map(item => (
-                        <Link
-                            key={item.to}
-                            to={item.to}
-                            className={`ml-nav-item${item.to === '/maintenance' ? ' active' : ''}`}
-                        >
-                            <span className="material-symbols-outlined">{item.icon}</span>
-                            {item.label}
-                        </Link>
-                    ))}
-                </nav>
-
-                <div className="ml-sidebar-footer">
-                    <Link to="/settings" className="ml-nav-item">
-                        <span className="material-symbols-outlined">settings</span>
-                        Settings
-                    </Link>
-                </div>
-            </aside>
-
-            {/* ══ MAIN ══ */}
-            <div className="ml-main">
-
-                {/* ── Topbar ── */}
-                <header className="ml-topbar">
-                    <div className="ml-breadcrumb">
-                        <span>Fleet Management</span>
-                        <span className="material-symbols-outlined">chevron_right</span>
-                        <span>Maintenance Logs</span>
-                    </div>
-
-                    <div className="ml-topbar-search">
-                        <span className="material-symbols-outlined">search</span>
-                        <input
-                            type="text"
-                            placeholder="Search logs, vehicles, service types…"
-                            value={search}
-                            onChange={e => { setSearch(e.target.value); setPage(1) }}
-                        />
-                    </div>
-
-                    <div className="ml-topbar-right">
-                        <button className="ml-notif-btn" aria-label="Notifications">
-                            <span className="material-symbols-outlined">notifications</span>
-                            <span className="ml-notif-badge" />
-                        </button>
-                        <div className="ml-divider" />
-                        <div className="ml-user-info">
-                            <div className="ml-user-name">{user?.name || 'Fleet User'}</div>
-                            <div className="ml-user-role">{user?.role || 'Manager'}</div>
-                        </div>
-                        <div className="ml-user-avatar" style={{ background: av.bg, color: av.text }}>
-                            {getInitials(user?.name || 'FM')}
-                        </div>
-                    </div>
-                </header>
-
-                {/* ── Content ── */}
-                <main className="ml-content">
+        <DashboardLayout breadcrumb={['Workspaces', 'Fleet Operations', 'Maintenance Logs']}>
+            <main className="ml-content">
 
                     {/* ══ LEFT — Add Log Form ══ */}
                     <div className="ml-panel-left">
@@ -569,8 +498,7 @@ export default function MaintenanceLogs() {
                         </div>
                     </div>
 
-                </main>
-            </div>
-        </div>
+            </main>
+        </DashboardLayout>
     )
 }

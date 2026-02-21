@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
-import { useNavigate, Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
+import DashboardLayout from '@/components/layout/DashboardLayout'
 import './TripDispatcher.css'
 
 // ---------- helpers ----------
@@ -78,7 +79,7 @@ export default function TripDispatcher() {
     const navigate = useNavigate()
 
     // ── Auth ──
-    const user = getUser()
+    const _user = getUser()
     const token = getToken()
 
     useEffect(() => {
@@ -238,83 +239,8 @@ export default function TripDispatcher() {
 
     // ═══════════════════════════════════════
     return (
-        <div className="td-shell">
-
-            {/* ══════ SIDEBAR ══════ */}
-            <aside className="td-sidebar">
-                <div className="td-sidebar-header">
-                    <div className="td-sidebar-logo">
-                        <span className="material-symbols-outlined">local_shipping</span>
-                    </div>
-                    <div className="td-sidebar-brand">
-                        <h1>FleetFlow</h1>
-                        <p>ENTERPRISE LOGISTICS</p>
-                    </div>
-                </div>
-
-                <nav className="td-sidebar-nav">
-                    {NAV_ITEMS.map((item) => (
-                        <Link
-                            key={item.to}
-                            to={item.to}
-                            className={`td-nav-item${item.to === '/dispatch' ? ' active' : ''}`}
-                        >
-                            <span className="material-symbols-outlined">{item.icon}</span>
-                            {item.label}
-                        </Link>
-                    ))}
-                </nav>
-
-                <div className="td-sidebar-footer">
-                    <Link to="/settings" className="td-nav-item">
-                        <span className="material-symbols-outlined">settings</span>
-                        Settings
-                    </Link>
-                </div>
-            </aside>
-
-            {/* ══════ MAIN ══════ */}
-            <div className="td-main">
-
-                {/* ── Topbar ── */}
-                <header className="td-topbar">
-                    <div className="td-breadcrumb">
-                        <span>Operations</span>
-                        <span className="material-symbols-outlined">chevron_right</span>
-                        <span>Trip Dispatcher</span>
-                    </div>
-
-                    <div className="td-topbar-search">
-                        <span className="material-symbols-outlined">search</span>
-                        <input
-                            type="text"
-                            placeholder="Search trips, vehicles, drivers…"
-                            value={search}
-                            onChange={(e) => setSearch(e.target.value)}
-                        />
-                    </div>
-
-                    <div className="td-topbar-right">
-                        <button className="td-notif-btn" aria-label="Notifications">
-                            <span className="material-symbols-outlined">notifications</span>
-                            <span className="td-notif-badge" />
-                        </button>
-                        <div className="td-divider" />
-                        <div className="td-user-info">
-                            <div className="td-user-name">{user?.name || 'Fleet User'}</div>
-                            <div className="td-user-role">{user?.role || 'Dispatcher'}</div>
-                        </div>
-                        <div
-                            className="td-user-avatar"
-                            style={{ background: avatarColor(user?.name || '').bg, color: avatarColor(user?.name || '').text }}
-                        >
-                            {getInitials(user?.name || 'FU')}
-                        </div>
-                    </div>
-                </header>
-
-                {/* ── Content ── */}
-                <main className="td-content">
+        <DashboardLayout breadcrumb={['Workspaces', 'Fleet Operations', 'Trip Dispatcher']}>
+            <main className="td-content">
 
                     {/* ══ LEFT — Dispatch Form ══ */}
                     <div className="td-panel-left">
@@ -500,6 +426,15 @@ export default function TripDispatcher() {
                                     <p>Monitor real-time status of ongoing trips.</p>
                                 </div>
                                 <div className="td-table-head-right">
+                                    <div className="td-topbar-search" style={{ marginRight: 8 }}>
+                                        <span className="material-symbols-outlined">search</span>
+                                        <input
+                                            type="text"
+                                            placeholder="Search trips…"
+                                            value={search}
+                                            onChange={(e) => setSearch(e.target.value)}
+                                        />
+                                    </div>
                                     <div className="td-filter-tabs" role="group">
                                         {['all', 'active', 'drafts'].map((f) => (
                                             <button
@@ -685,8 +620,7 @@ export default function TripDispatcher() {
                         </div>
                     </div>
 
-                </main>
-            </div>
-        </div>
+            </main>
+        </DashboardLayout>
     )
 }

@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
-import { useNavigate, Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
+import DashboardLayout from '@/components/layout/DashboardLayout'
 import './VehicleRegistry.css'
 
 /* ═══════════════════════════════════════════════════
@@ -232,105 +233,7 @@ function VehicleRegistry() {
     }
 
     return (
-        <div className="vr-shell">
-            {/* ═══════ SIDEBAR ═══════ */}
-            <aside className="vr-sidebar">
-                <div className="vr-sidebar-header">
-                    <div className="vr-sidebar-logo">
-                        <span className="material-symbols-outlined">local_shipping</span>
-                    </div>
-                    <div className="vr-sidebar-brand">
-                        <h1>FleetFlow</h1>
-                        <p>Enterprise Logistics</p>
-                    </div>
-                </div>
-
-                <nav className="vr-sidebar-nav">
-                    <Link to="/" className="vr-sidebar-item">
-                        <span className="material-symbols-outlined vr-icon-sm">dashboard</span>
-                        Command Center
-                    </Link>
-                    <Link to="/vehicles" className="vr-sidebar-item active">
-                        <span className="material-symbols-outlined vr-icon-sm">commute</span>
-                        Vehicle Registry
-                    </Link>
-                    <Link to="/dispatch" className="vr-sidebar-item">
-                        <span className="material-symbols-outlined vr-icon-sm">alt_route</span>
-                        Trip Dispatcher
-                    </Link>
-                    <Link to="/maintenance" className="vr-sidebar-item">
-                        <span className="material-symbols-outlined vr-icon-sm">build</span>
-                        Maintenance Logs
-                    </Link>
-                    <Link to="/expenses" className="vr-sidebar-item">
-                        <span className="material-symbols-outlined vr-icon-sm">receipt_long</span>
-                        Expenses &amp; Fuel
-                    </Link>
-                    <Link to="/drivers" className="vr-sidebar-item">
-                        <span className="material-symbols-outlined vr-icon-sm">badge</span>
-                        Driver Profiles
-                    </Link>
-                    <Link to="/analytics" className="vr-sidebar-item">
-                        <span className="material-symbols-outlined vr-icon-sm">analytics</span>
-                        Analytics
-                    </Link>
-                </nav>
-
-                <div className="vr-sidebar-footer">
-                    <button className="vr-sidebar-item" onClick={handleLogout}>
-                        <span className="material-symbols-outlined vr-icon-sm">logout</span>
-                        Logout
-                    </button>
-                </div>
-            </aside>
-
-            {/* ═══════ MAIN CONTENT ═══════ */}
-            <div className="vr-main-wrapper">
-                {/* ── Header ── */}
-                <header className="vr-header">
-                    <div className="vr-breadcrumb">
-                        <span className="vr-breadcrumb-link">FleetFlow</span>
-                        <span className="vr-breadcrumb-sep">/</span>
-                        <span className="vr-breadcrumb-current">Vehicle Registry</span>
-                    </div>
-
-                    <div className="vr-search-wrapper">
-                        <span className="material-symbols-outlined vr-search-icon">search</span>
-                        <input
-                            type="text"
-                            className="vr-search-input"
-                            placeholder="Search vehicles, plates, or status..."
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                        />
-                    </div>
-
-                    <div className="vr-header-actions">
-                        <button className="vr-notification-btn">
-                            <span className="material-symbols-outlined">notifications</span>
-                            <span className="vr-notification-badge"></span>
-                        </button>
-                        <div className="vr-divider"></div>
-                        <div className="vr-user-info">
-                            <div className="vr-user-details">
-                                <p className="vr-user-name">{user?.name || 'Fleet Manager'}</p>
-                                <p className="vr-user-role">Fleet Manager</p>
-                            </div>
-                            <div 
-                                className="vr-avatar"
-                                style={{
-                                    backgroundColor: avatarColor(user?.name || '').bg,
-                                    color: avatarColor(user?.name || '').text
-                                }}
-                            >
-                                {getInitials(user?.name || 'FM')}
-                            </div>
-                        </div>
-                    </div>
-                </header>
-
-                {/* ── Main Content ── */}
-                <main className="vr-content">
+        <DashboardLayout breadcrumb={['Workspaces', 'Fleet Operations', 'Vehicle Registry']}>
                     {/* Page title and actions */}
                     <div className="vr-page-header">
                         <div className="vr-page-title-section">
@@ -482,8 +385,6 @@ function VehicleRegistry() {
                             </>
                         )}
                     </div>
-                </main>
-            </div>
 
             {/* ═══════ ADD VEHICLE MODAL ═══════ */}
             {showModal && (
@@ -564,7 +465,7 @@ function VehicleRegistry() {
                     </div>
                 </div>
             )}
-        </div>
+        </DashboardLayout>
     )
 }
 
