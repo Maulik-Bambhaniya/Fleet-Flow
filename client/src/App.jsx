@@ -5,6 +5,10 @@ import Landing from './pages/Landing'
 import MaintenanceLogs from './pages/MaintenanceLogs'
 import CommandCenter from './pages/CommandCenter'
 import TripDispatcher from './pages/TripDispatcher'
+import VehicleRegistry from './pages/VehicleRegistry'
+import ExpensesFuel from './pages/ExpensesFuel'
+import DriverProfiles from './pages/DriverProfiles'
+import Analytics from './pages/Analytics'
 
 function App() {
   return (
