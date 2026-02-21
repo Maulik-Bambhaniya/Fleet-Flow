@@ -5,6 +5,7 @@ import Landing from './pages/Landing'
 import MaintenanceLogs from './pages/MaintenanceLogs'
 import CommandCenter from './pages/CommandCenter'
 import TripDispatcher from './pages/TripDispatcher'
+import VehicleRegistry from './pages/VehicleRegistry'
 import ExpensesFuel from './pages/ExpensesFuel'
 import Analytics from './pages/Analytics'
 
@@ -14,6 +15,7 @@ function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
       <Route path="/" element={<Landing />} />
+      <Route path="/vehicles" element={<VehicleRegistry />} />
       <Route path="/maintenance" element={<MaintenanceLogs />} />
       <Route path="/dashboard" element={<CommandCenter />} />
       <Route path="/dispatch" element={<TripDispatcher />} />
