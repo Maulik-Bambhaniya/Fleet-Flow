@@ -1,0 +1,37 @@
+.hero-blueprint {
+    background-color: #F7F7F5;
+    background-image:
+        linear-gradient(#E0E0E0 1px, transparent 1px),
+        linear-gradient(90deg, #E0E0E0 1px, transparent 1px);
+    background-size: 40px 40px;
+    background-position: center center;
+    position: relative;
+}
+
+.hero-blueprint::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at center, transparent 0%, #F7F7F5 85%);
+    pointer-events: none;
+}
+
+.clay-morphic {
+    background: #ffffff;
+    border-radius: 24px;
+    box-shadow:
+        8px 8px 16px rgba(0, 0, 0, 0.05),
+        -8px -8px 16px rgba(255, 255, 255, 0.8),
+        inset 2px 2px 4px rgba(255, 255, 255, 0.5),
+        inset -2px -2px 4px rgba(0, 0, 0, 0.02);
+    transform: perspective(1000px) rotateY(-12deg) rotateX(8deg);
+    transition: transform 0.5s ease;
+}
+
+.clay-morphic:hover {
+    transform: perspective(1000px) rotateY(-8deg) rotateX(5deg);
+}
+
+.nav-link {
+    @apply text-sm font-medium text-secondary-text hover:text-primary transition-colors;
+}

@@ -11,9 +11,14 @@ export default {
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
         primary: {
-          DEFAULT: 'hsl(var(--primary))',
+          DEFAULT: 'var(--primary)', // Allow fallback to CSS variable
+          stitch: '#2F3A45',         // Add Stitch primary
           foreground: 'hsl(var(--primary-foreground))',
         },
+        'background-light': '#F7F7F5',
+        'background-base': '#F7F7F5',
+        'slate-deep': '#2F3A45',
+        'secondary-text': '#5A5A5A',
         secondary: {
           DEFAULT: 'hsl(var(--secondary))',
           foreground: 'hsl(var(--secondary-foreground))',
