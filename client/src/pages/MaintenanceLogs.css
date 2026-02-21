@@ -288,7 +288,6 @@
 /* ══════════ CONTENT ══════════ */
 .ml-content {
     flex: 1;
-    padding: 32px;
     overflow: hidden;
     display: flex;
     gap: 32px;
