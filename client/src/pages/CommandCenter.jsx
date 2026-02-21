@@ -18,7 +18,7 @@ export default function CommandCenter() {
   const [vehicles, setVehicles] = useState([])
   const [weeklyBars, setWeeklyBars] = useState([])
   const [totalVehicles, setTotal] = useState(0)
-  const [loading, setLoading] = useState(true)
+  const [_loading, setLoading] = useState(true)
   const [page, setPage] = useState(1)
   const [chartView, setChartView] = useState('Weekly')
   const limit = 4
@@ -58,14 +58,8 @@ export default function CommandCenter() {
 
   const totalPages = Math.ceil(totalVehicles / limit)
   const fleetTotal = fleet.total || 1
-  const totalPages = Math.ceil(totalVehicles / limit)
-  const fleetTotal = fleet.total || 1
 
   // Conic gradient percentages
-  const avPct = Math.round((fleet.available / fleetTotal) * 100)
-  const otPct = Math.round((fleet.onTrip / fleetTotal) * 100)
-  const isPct = Math.round((fleet.inShop / fleetTotal) * 100)
-  const crPct = 100 - avPct - otPct - isPct
   const avPct = Math.round((fleet.available / fleetTotal) * 100)
   const otPct = Math.round((fleet.onTrip / fleetTotal) * 100)
   const isPct = Math.round((fleet.inShop / fleetTotal) * 100)
@@ -79,7 +73,7 @@ export default function CommandCenter() {
   )`
 
   return (
-    <DashboardLayout breadcrumb={['Dashboard', 'Command Center']}>
+    <DashboardLayout>
       <div className="max-w-7xl mx-auto space-y-8">
 
         {/* ── Page Header ───────────────────────────────────────────── */}
@@ -261,7 +255,6 @@ export default function CommandCenter() {
               </thead>
               <tbody className="text-sm">
                 {vehicles.map((v) => {
-                  const s = STATUS_CONFIG[v.status] || STATUS_CONFIG.available
                   const s = STATUS_CONFIG[v.status] || STATUS_CONFIG.available
                   const cap = v.capacity_percentage ?? 0
                   const capColorClass = v.capColor || (cap >= 90 ? 'bg-red-500' : cap >= 50 ? 'bg-blue-600' : 'bg-green-600')
