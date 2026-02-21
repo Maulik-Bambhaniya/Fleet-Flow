@@ -1,74 +1,69 @@
 import { useState, useEffect } from 'react'
 import DashboardLayout from '@/components/layout/DashboardLayout'
 
-// ─── Default mock data ────────────────────────────────────────────────────────
-const DEFAULT_STATS = {
-  activeFleet: 142,
-  maintenanceAlerts: 8,
-  fleetUtilization: 94,
-  pendingCargoOrders: 24,
-}
-
-const WEEKLY_BARS = [
-  { day: 'Mon', pct: 75 },
-  { day: 'Tue', pct: 92 },
-  { day: 'Wed', pct: 65 },
-  { day: 'Thu', pct: 88 },
-  { day: 'Fri', pct: 95 },
-  { day: 'Sat', pct: 45, dim: true },
-  { day: 'Sun', pct: 30, dim: true },
-]
-
-const DEFAULT_FLEET = { total: 150, available: 97, onTrip: 30, inShop: 15, critical: 8 }
-
-const DEFAULT_VEHICLES = [
-  { id: '1', name: 'Volvo FH16',      license_plate: 'FL-2049', status: 'on_trip',   driver_name: 'John Doe',   driver_initials: 'JD', driverColor: 'bg-indigo-100 text-indigo-700', region: 'Pacific NW',      capacity_percentage: 85, capColor: 'bg-blue-600'  },
-  { id: '2', name: 'Mercedes Actros', license_plate: 'FL-3921', status: 'available', driver_name: null,         driver_initials: null,  driverColor: '',                              region: 'California South', capacity_percentage: 0,  capColor: 'bg-green-600' },
-  { id: '3', name: 'Scania R500',     license_plate: 'FL-8820', status: 'in_shop',   driver_name: 'Mike Smith', driver_initials: 'MS',  driverColor: 'bg-orange-100 text-orange-700', region: 'Nevada',           capacity_percentage: 0,  capColor: 'bg-gray-400'  },
-  { id: '4', name: 'Kenworth T680',   license_plate: 'FL-1192', status: 'critical',  driver_name: 'Alice Lee',  driver_initials: 'AL',  driverColor: 'bg-purple-100 text-purple-700', region: 'Texas North',      capacity_percentage: 95, capColor: 'bg-red-500'   },
-]
-
 const STATUS_CONFIG = {
-  on_trip:   { label: 'On Trip',   pillClass: 'bg-slate-100 text-slate-700',                            dotClass: 'bg-slate-500'  },
-  available: { label: 'Available', pillClass: 'bg-[#E8F5E9] text-[#2E7D32]',                            dotClass: 'bg-green-600'  },
-  in_shop:   { label: 'In Shop',   pillClass: 'bg-[#FFF8E1] text-[#B7791F]',                            dotClass: 'bg-[#B7791F]'  },
-  critical:  { label: 'Critical',  pillClass: 'bg-[#FDECEC] text-[#C53030]',                            dotClass: 'bg-[#C53030]'  },
+  on_trip: { label: 'On Trip', pillClass: 'bg-slate-100 text-slate-700', dotClass: 'bg-slate-500' },
+  'On Trip': { label: 'On Trip', pillClass: 'bg-slate-100 text-slate-700', dotClass: 'bg-slate-500' },
+  available: { label: 'Available', pillClass: 'bg-[#E8F5E9] text-[#2E7D32]', dotClass: 'bg-green-600' },
+  'Available': { label: 'Available', pillClass: 'bg-[#E8F5E9] text-[#2E7D32]', dotClass: 'bg-green-600' },
+  in_shop: { label: 'In Shop', pillClass: 'bg-[#FFF8E1] text-[#B7791F]', dotClass: 'bg-[#B7791F]' },
+  'In Shop': { label: 'In Shop', pillClass: 'bg-[#FFF8E1] text-[#B7791F]', dotClass: 'bg-[#B7791F]' },
+  critical: { label: 'Critical', pillClass: 'bg-[#FDECEC] text-[#C53030]', dotClass: 'bg-[#C53030]' },
+  'Critical': { label: 'Critical', pillClass: 'bg-[#FDECEC] text-[#C53030]', dotClass: 'bg-[#C53030]' },
 }
 
 export default function CommandCenter() {
-  const [stats, setStats]         = useState(DEFAULT_STATS)
-  const [fleet, setFleet]         = useState(DEFAULT_FLEET)
-  const [vehicles, setVehicles]   = useState(DEFAULT_VEHICLES)
-  const [totalVehicles, setTotal] = useState(150)
-  const [page, setPage]           = useState(1)
+  const [stats, setStats] = useState({ activeFleet: 0, maintenanceAlerts: 0, fleetUtilization: 0, pendingCargoOrders: 0 })
+  const [fleet, setFleet] = useState({ total: 0, available: 0, onTrip: 0, inShop: 0, critical: 0 })
+  const [vehicles, setVehicles] = useState([])
+  const [weeklyBars, setWeeklyBars] = useState([])
+  const [totalVehicles, setTotal] = useState(0)
+  const [loading, setLoading] = useState(true)
+  const [page, setPage] = useState(1)
   const [chartView, setChartView] = useState('Weekly')
   const limit = 4
 
+  // Fetch dashboard stats, fleet status, and weekly utilization
   useEffect(() => {
     Promise.all([
       fetch('/api/dashboard/stats').then(r => r.ok ? r.json() : null),
       fetch('/api/dashboard/fleet-status').then(r => r.ok ? r.json() : null),
-    ]).then(([s, f]) => {
+      fetch('/api/dashboard/weekly-utilization').then(r => r.ok ? r.json() : null),
+    ]).then(([s, f, w]) => {
       if (s) setStats(s)
       if (f) setFleet(f)
-    }).catch(() => {})
+      if (w && Array.isArray(w)) {
+        setWeeklyBars(w.map(d => ({
+          day: d.day,
+          pct: parseFloat(d.utilization_percentage) || 0,
+          dim: d.day === 'Sat' || d.day === 'Sun'
+        })))
+      }
+    }).catch(() => { }).finally(() => setLoading(false))
   }, [])
 
+  // Fetch vehicles for the list
   useEffect(() => {
-    fetch(`/api/vehicles?page=${page}&limit=${limit}`)
+    fetch('/api/vehicles')
       .then(r => r.ok ? r.json() : null)
-      .then(d => { if (d?.vehicles?.length) { setVehicles(d.vehicles); setTotal(d.total) } })
-      .catch(() => {})
+      .then(d => {
+        if (Array.isArray(d)) {
+          setTotal(d.length)
+          const start = (page - 1) * limit
+          setVehicles(d.slice(start, start + limit))
+        }
+      })
+      .catch(() => { })
   }, [page])
 
-  const totalPages  = Math.ceil(totalVehicles / limit)
-  const fleetTotal  = fleet.total || 1
+  const totalPages = Math.ceil(totalVehicles / limit)
+  const fleetTotal = fleet.total || 1
 
   // Conic gradient percentages
-  const avPct  = Math.round((fleet.available / fleetTotal) * 100)
-  const otPct  = Math.round((fleet.onTrip    / fleetTotal) * 100)
-  const isPct  = Math.round((fleet.inShop    / fleetTotal) * 100)
-  const crPct  = 100 - avPct - otPct - isPct
+  const avPct = Math.round((fleet.available / fleetTotal) * 100)
+  const otPct = Math.round((fleet.onTrip / fleetTotal) * 100)
+  const isPct = Math.round((fleet.inShop / fleetTotal) * 100)
+  const crPct = 100 - avPct - otPct - isPct
 
   const donutGradient = `conic-gradient(
     #2E7D32 0% ${avPct}%,
@@ -166,11 +161,10 @@ export default function CommandCenter() {
                   <button
                     key={v}
                     onClick={() => setChartView(v)}
-                    className={`px-3 py-1 rounded text-sm font-medium transition ${
-                      chartView === v
-                        ? 'bg-gray-100 text-[#1A1A1A]'
-                        : 'text-[#5A5A5A] hover:text-[#1A1A1A]'
-                    }`}
+                    className={`px-3 py-1 rounded text-sm font-medium transition ${chartView === v
+                      ? 'bg-gray-100 text-[#1A1A1A]'
+                      : 'text-[#5A5A5A] hover:text-[#1A1A1A]'
+                      }`}
                   >
                     {v}
                   </button>
@@ -178,7 +172,7 @@ export default function CommandCenter() {
               </div>
             </div>
             <div className="flex-1 flex items-end justify-between gap-4 px-2 pb-2 border-b border-gray-100">
-              {WEEKLY_BARS.map(({ day, pct, dim }) => (
+              {weeklyBars.map(({ day, pct, dim }) => (
                 <div key={day} className="flex flex-col items-center gap-2 flex-1 h-full justify-end group">
                   <div className="relative w-full max-w-[40px] h-[60%] bg-slate-100 rounded-sm overflow-hidden">
                     <div
@@ -214,9 +208,9 @@ export default function CommandCenter() {
             <div className="mt-6 space-y-3">
               {[
                 { color: '#2E7D32', label: 'Available', value: fleet.available, pct: avPct },
-                { color: '#2F3A45', label: 'On Trip',   value: fleet.onTrip,    pct: otPct },
-                { color: '#B7791F', label: 'In Shop',   value: fleet.inShop,    pct: isPct },
-                { color: '#C53030', label: 'Critical',  value: fleet.critical,  pct: crPct },
+                { color: '#2F3A45', label: 'On Trip', value: fleet.onTrip, pct: otPct },
+                { color: '#B7791F', label: 'In Shop', value: fleet.inShop, pct: isPct },
+                { color: '#C53030', label: 'Critical', value: fleet.critical, pct: crPct },
               ].map(({ color, label, value, pct }) => (
                 <div key={label} className="flex justify-between items-center text-sm">
                   <div className="flex items-center gap-2">
@@ -258,7 +252,7 @@ export default function CommandCenter() {
               </thead>
               <tbody className="text-sm">
                 {vehicles.map((v) => {
-                  const s   = STATUS_CONFIG[v.status] || STATUS_CONFIG.available
+                  const s = STATUS_CONFIG[v.status] || STATUS_CONFIG.available
                   const cap = v.capacity_percentage ?? 0
                   const capColorClass = v.capColor || (cap >= 90 ? 'bg-red-500' : cap >= 50 ? 'bg-blue-600' : 'bg-green-600')
 

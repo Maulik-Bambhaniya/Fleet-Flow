@@ -15,6 +15,7 @@ const driverRoutes = require("./routes/drivers");
 const expenseRoutes = require("./routes/expenses");
 const dashboardRoutes = require("./routes/dashboard");
 const analyticsRoutes = require("./routes/analytics");
+const searchRoutes = require("./routes/search");
 const seed = require("./config/seed");
 
 const User = require("./models/User");
@@ -46,6 +47,7 @@ app.use("/api/drivers", driverRoutes);
 app.use("/api/expenses", expenseRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/analytics", analyticsRoutes);
+app.use("/api/search", searchRoutes);
 
 // Root
 app.get("/", (req, res) => {
@@ -76,6 +78,7 @@ const start = async () => {
         await MaintenanceLog.seedDefaults(vehicleMap);
         await Expense.seedDefaults();
         await Analytics.seedDefaults();
+        if (typeof Trip.seedDefaults === 'function') await Trip.seedDefaults();
 
         if (typeof MaintenanceAlert.seedDefaults === 'function') await MaintenanceAlert.seedDefaults();
         if (typeof CargoOrder.seedDefaults === 'function') await CargoOrder.seedDefaults();

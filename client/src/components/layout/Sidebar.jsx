@@ -1,13 +1,13 @@
 import { Link, useLocation } from 'react-router-dom'
 
 const navItems = [
-  { icon: 'dashboard',      label: 'Dashboard',  path: '/dashboard',   fill: true },
-  { icon: 'directions_car', label: 'Vehicle Registry', path: '/vehicles'              },
-  { icon: 'alt_route',      label: 'Trip Dispatcher',  path: '/dispatch'                 },
-  { icon: 'build',          label: 'Maintenance Logs', path: '/maintenance'           },
-  { icon: 'receipt_long',   label: 'Expenses & Fuel',  path: '/expenses'              },
-  { icon: 'badge',          label: 'Driver Profiles',  path: '/drivers'               },
-  { icon: 'bar_chart',      label: 'Analytics',        path: '/analytics'             },
+  { icon: 'dashboard', label: 'Dashboard', path: '/dashboard', fill: true },
+  { icon: 'directions_car', label: 'Vehicle Registry', path: '/vehicles' },
+  { icon: 'alt_route', label: 'Trip Dispatcher', path: '/dispatch' },
+  { icon: 'build', label: 'Maintenance Logs', path: '/maintenance' },
+  { icon: 'receipt_long', label: 'Expenses & Fuel', path: '/expenses' },
+  { icon: 'badge', label: 'Driver Profiles', path: '/drivers' },
+  { icon: 'bar_chart', label: 'Analytics', path: '/analytics' },
 ]
 
 export default function Sidebar() {
@@ -58,21 +58,7 @@ export default function Sidebar() {
         })}
       </nav>
 
-      {/* Settings */}
-      <div className="p-3 mt-auto border-t border-[#E6E6E6]">
-        <Link
-          to="/settings"
-          className={
-            'flex items-center px-4 py-2.5 text-sm font-medium rounded-md transition-colors duration-200 ' +
-            (location.pathname === '/settings'
-              ? 'bg-white text-[#1A1A1A] border-l-4 border-[#2F3A45] !pl-3 shadow-sm'
-              : 'text-[#5A5A5A] hover:bg-white hover:text-[#1A1A1A]')
-          }
-        >
-          <span className="material-symbols-outlined mr-3 text-[20px]">settings</span>
-          Settings
-        </Link>
-      </div>
+
     </aside>
   )
 }

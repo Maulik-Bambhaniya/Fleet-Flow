@@ -140,14 +140,26 @@ const Vehicle = {
         if (parseInt(rows[0].count) > 0) return;
 
         const defaults = [
-            { name: "Volvo FH16 - #402", license_plate: "V78-992-KL", type: "Truck", max_capacity: 18000, odometer: 125000, region: "North West" },
-            { name: "Mercedes Actros - #205", license_plate: "M45-123-ZZ", type: "Truck", max_capacity: 15000, odometer: 98000, region: "East Coast" },
-            { name: "Scania R500 - #112", license_plate: "S88-554-PL", type: "Truck", max_capacity: 20000, odometer: 210000, region: "South" },
-            { name: "Ford Transit - #VAN04", license_plate: "F12-332-NY", type: "Van", max_capacity: 1500, odometer: 45000, region: "East Coast" },
-            { name: "Kenworth T680 - #301", license_plate: "K99-112-TX", type: "Truck", max_capacity: 22000, odometer: 175000, region: "South West" },
-            { name: "Volvo VNL - #410", license_plate: "V22-118-CA", type: "Truck", max_capacity: 19000, odometer: 142000, region: "North West" },
-            { name: "Ram ProMaster - #VAN09", license_plate: "R44-991-FL", type: "Van", max_capacity: 1800, odometer: 62000, region: "South East" },
-            { name: "Peterbilt 579 - #550", license_plate: "P11-223-AZ", type: "Truck", max_capacity: 24000, odometer: 198000, region: "South West" },
+            { name: "Volvo FH16 - #402", license_plate: "V78-992-KL", type: "Truck", max_capacity: 18000, odometer: 125000, region: "North West", status: "On Trip" },
+            { name: "Mercedes Actros - #205", license_plate: "M45-123-ZZ", type: "Truck", max_capacity: 15000, odometer: 98000, region: "East Coast", status: "In Shop" },
+            { name: "Scania R500 - #112", license_plate: "S88-554-PL", type: "Truck", max_capacity: 20000, odometer: 210000, region: "South", status: "Available" },
+            { name: "Ford Transit - #VAN04", license_plate: "F12-332-NY", type: "Van", max_capacity: 1500, odometer: 45000, region: "East Coast", status: "Available" },
+            { name: "Kenworth T680 - #301", license_plate: "K99-112-TX", type: "Truck", max_capacity: 22000, odometer: 175000, region: "South West", status: "In Shop" },
+            { name: "Volvo VNL - #410", license_plate: "V22-118-CA", type: "Truck", max_capacity: 19000, odometer: 142000, region: "North West", status: "Available" },
+            { name: "Ram ProMaster - #VAN09", license_plate: "R44-991-FL", type: "Van", max_capacity: 1800, odometer: 62000, region: "South East", status: "Available" },
+            { name: "Peterbilt 579 - #550", license_plate: "P11-223-AZ", type: "Truck", max_capacity: 24000, odometer: 198000, region: "South West", status: "In Shop" },
+            { name: "Freightliner Cascadia - #610", license_plate: "FC-810-OR", type: "Truck", max_capacity: 21000, odometer: 165000, region: "North West", status: "On Trip" },
+            { name: "Mack Anthem - #331", license_plate: "MA-445-GA", type: "Truck", max_capacity: 23000, odometer: 89000, region: "South East", status: "Available" },
+            { name: "International LT - #720", license_plate: "IL-339-OH", type: "Truck", max_capacity: 20000, odometer: 112000, region: "Midwest", status: "On Trip" },
+            { name: "DAF XF - #815", license_plate: "DX-667-PA", type: "Truck", max_capacity: 18500, odometer: 76000, region: "East Coast", status: "Available" },
+            { name: "MAN TGX - #920", license_plate: "MT-221-IL", type: "Truck", max_capacity: 19500, odometer: 54000, region: "Midwest", status: "Available" },
+            { name: "Iveco S-Way - #108", license_plate: "IS-884-NJ", type: "Truck", max_capacity: 17000, odometer: 132000, region: "East Coast", status: "Critical" },
+            { name: "Ford E-Transit - #VAN15", license_plate: "FE-102-WA", type: "Van", max_capacity: 1200, odometer: 28000, region: "North West", status: "Available" },
+            { name: "Mercedes Sprinter - #VAN22", license_plate: "MS-556-CO", type: "Van", max_capacity: 1600, odometer: 51000, region: "Mountain", status: "Available" },
+            { name: "Volvo VNR - #430", license_plate: "VR-778-MN", type: "Truck", max_capacity: 16000, odometer: 94000, region: "Midwest", status: "On Trip" },
+            { name: "Kenworth W990 - #305", license_plate: "KW-443-NV", type: "Truck", max_capacity: 25000, odometer: 223000, region: "Mountain", status: "Available" },
+            { name: "Peterbilt 389 - #555", license_plate: "PB-991-UT", type: "Truck", max_capacity: 24000, odometer: 187000, region: "Mountain", status: "Critical" },
+            { name: "Chevrolet Express - #VAN30", license_plate: "CE-127-MI", type: "Van", max_capacity: 1400, odometer: 38000, region: "Midwest", status: "In Shop" },
         ];
 
         for (const v of defaults) {
