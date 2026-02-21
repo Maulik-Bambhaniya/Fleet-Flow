@@ -40,7 +40,7 @@ function Login() {
             storage.setItem('token', data.token)
             storage.setItem('user', JSON.stringify(data.user))
 
-            navigate('/')
+            navigate('/dashboard')
         } catch {
             setError('Unable to connect to server')
         } finally {
