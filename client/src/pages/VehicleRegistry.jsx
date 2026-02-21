@@ -1,6 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
-import { useNavigate } from 'react-router-dom'
-import DashboardLayout from '@/components/layout/DashboardLayout'
+import { useNavigate, Link } from 'react-router-dom'
 import './VehicleRegistry.css'
 
 /* ═══════════════════════════════════════════════════
@@ -595,6 +594,8 @@ function VehicleRegistry() {
                             </>
                         )}
                     </div>
+                </main>
+            </div>
 
             {/* ═══════ ADD VEHICLE MODAL ═══════ */}
             {showModal && (
@@ -687,7 +688,7 @@ function VehicleRegistry() {
                     </div>
                 </div>
             )}
-        </DashboardLayout>
+        </div>
     )
 }
 
