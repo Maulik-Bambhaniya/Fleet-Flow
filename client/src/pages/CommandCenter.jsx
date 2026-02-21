@@ -18,7 +18,7 @@ export default function CommandCenter() {
   const [vehicles, setVehicles] = useState([])
   const [weeklyBars, setWeeklyBars] = useState([])
   const [totalVehicles, setTotal] = useState(0)
-  const [loading, setLoading] = useState(true)
+  const [_loading, setLoading] = useState(true)
   const [page, setPage] = useState(1)
   const [chartView, setChartView] = useState('Weekly')
   const limit = 4
@@ -73,7 +73,7 @@ export default function CommandCenter() {
   )`
 
   return (
-    <DashboardLayout breadcrumb={['Dashboard', 'Command Center']}>
+    <DashboardLayout>
       <div className="max-w-7xl mx-auto space-y-8">
 
         {/* ── Page Header ───────────────────────────────────────────── */}
@@ -208,6 +208,9 @@ export default function CommandCenter() {
             <div className="mt-6 space-y-3">
               {[
                 { color: '#2E7D32', label: 'Available', value: fleet.available, pct: avPct },
+                { color: '#2F3A45', label: 'On Trip', value: fleet.onTrip, pct: otPct },
+                { color: '#B7791F', label: 'In Shop', value: fleet.inShop, pct: isPct },
+                { color: '#C53030', label: 'Critical', value: fleet.critical, pct: crPct },
                 { color: '#2F3A45', label: 'On Trip', value: fleet.onTrip, pct: otPct },
                 { color: '#B7791F', label: 'In Shop', value: fleet.inShop, pct: isPct },
                 { color: '#C53030', label: 'Critical', value: fleet.critical, pct: crPct },

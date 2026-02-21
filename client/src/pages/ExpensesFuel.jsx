@@ -264,7 +264,7 @@ export default function ExpensesFuel() {
        RENDER
        ═══════════════════════════════════════════════ */
     return (
-        <DashboardLayout breadcrumb={['Workspaces', 'Fleet Operations', 'Expenses & Fuel']}>
+        <DashboardLayout>
                 <div className="exp-content">
                     {/* Header */}
                     <div className="exp-header">

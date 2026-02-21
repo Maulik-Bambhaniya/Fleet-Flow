@@ -315,7 +315,7 @@ function VehicleRegistry() {
     }
 
     return (
-        <DashboardLayout breadcrumb={['Dashboard', 'Vehicle Registry']}>
+        <DashboardLayout>
             <main className="vr-content">
                 {/* Page title and actions */}
                 <div className="vr-page-header">

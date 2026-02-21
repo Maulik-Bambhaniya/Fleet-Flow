@@ -73,7 +73,7 @@ export default function Analytics() {
         const innerW = width - padX * 2
         const innerH = height - padY * 2
 
-        const minVal = 0
+            const minVal = 0 // eslint-disable-line no-unused-vars
         const maxVal = 120 // padding for visuals
 
         const xStep = innerW / (chartData.length - 1)
@@ -197,7 +197,7 @@ export default function Analytics() {
     }
 
     return (
-        <DashboardLayout breadcrumb={['Dashboard', 'Analytics & Reports']}>
+        <DashboardLayout>
             <div className="ana-content">
                 {/* Header */}
                 <div className="ana-header">
